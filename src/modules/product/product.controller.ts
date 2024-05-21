@@ -25,12 +25,21 @@ const createProduct = async (req: Request, res: Response) => {
 //get all products
 const getAllProducts = async (req: Request, res: Response) => {
   try {
-    const result = await ProductServices.getAllProductsIntoDB();
-    res.status(200).json({
-      success: true,
-      message: "Products fetched successfully!",
-      data: result,
-    });
+    const searchTerm = req.query.searchTerm as string;
+    const result = await ProductServices.getAllProductsIntoDB(searchTerm);
+    if (searchTerm) {
+      res.status(200).json({
+        success: true,
+        message: `Products matching search term '${searchTerm}' fetched successfully!`,
+        data: result,
+      });
+    } else {
+      res.status(200).json({
+        success: true,
+        message: "Products fetched successfully!",
+        data: result,
+      });
+    }
   } catch (err: any) {
     res.status(500).json({
       success: false,
@@ -84,9 +93,50 @@ const updateSingleProduct = async (req: Request, res: Response) => {
   }
 };
 
+//deleted single product
+const deleteSingleProduct = async (req: Request, res: Response) => {
+  try {
+    const { productId } = req.params;
+    const result = await ProductServices.deleteSingleProductIntoDB(productId);
+    res.status(200).json({
+      success: true,
+      message: "Product deleted successfully!",
+      data: result,
+    });
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: err.message || "Something went wrong",
+      error: err,
+    });
+  }
+};
+
+//search single product
+// const searchSingleProduct = async (req: Request, res: Response) => {
+//   try {
+//     const searchTerm = req.query.searchTerm as string;
+//     console.log(searchTerm);
+//     const result = await ProductServices.searchProductIntoDB(searchTerm);
+
+//     res.status(200).json({
+//       success: true,
+//       message: `Products matching search term ${searchTerm} fetched successfully!`,
+//       data: result,
+//     });
+//   } catch (err: any) {
+//     res.status(500).json({
+//       success: false,
+//       message: err.message || "Something went wrong",
+//       error: err,
+//     });
+//   }
+// };
+
 export const ProductControllers = {
   createProduct,
   getAllProducts,
   getSingleProduct,
   updateSingleProduct,
+  deleteSingleProduct,
 };
