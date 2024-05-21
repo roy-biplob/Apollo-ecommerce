@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { OrderServices } from "./order.service";
-import { productModel } from "../product/product.model";
+import { CustomError } from "./order.interface";
 
 // create order
 const createOrder = async (req: Request, res: Response) => {
@@ -17,11 +17,12 @@ const createOrder = async (req: Request, res: Response) => {
       message: `Order created successfully!`,
       data: result,
     });
-  } catch (err: any) {
+  } catch (err) {
+    const error = err as CustomError;
     res.status(500).json({
       success: false,
-      message: err.message || "Something went wrong",
-      //   error: err,
+      message: error.message || "Something went wrong",
+      // error: err,
     });
   }
 };
@@ -45,11 +46,12 @@ const getAllOrders = async (req: Request, res: Response) => {
         data: result,
       });
     }
-  } catch (err: any) {
+  } catch (err) {
+    const error = err as CustomError;
     res.status(500).json({
       success: false,
-      message: err.message || "Something went wrong",
-      error: err,
+      message: error.message || "Something went wrong",
+      error: error,
     });
   }
 };

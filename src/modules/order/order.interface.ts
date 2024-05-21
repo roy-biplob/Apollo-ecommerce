@@ -6,3 +6,8 @@ export type TOrder = {
   price: number;
   quantity: number;
 };
+
+export interface CustomError extends Error {
+  status?: number;
+  details?: string;
+}

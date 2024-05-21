@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { ProductServices } from "./product.service";
+import { CustomError } from "../order/order.interface";
 
 // product create
 const createProduct = async (req: Request, res: Response) => {
@@ -13,11 +14,12 @@ const createProduct = async (req: Request, res: Response) => {
       message: "Product created successfully!",
       data: result,
     });
-  } catch (err: any) {
+  } catch (err) {
+    const error = err as CustomError;
     res.status(500).json({
       success: false,
-      message: err.message || "Something went wrong",
-      error: err,
+      message: error.message || "Something went wrong",
+      error: error,
     });
   }
 };
@@ -40,11 +42,12 @@ const getAllProducts = async (req: Request, res: Response) => {
         data: result,
       });
     }
-  } catch (err: any) {
+  } catch (err) {
+    const error = err as CustomError;
     res.status(500).json({
       success: false,
-      message: err.message || "Something went wrong",
-      error: err,
+      message: error.message || "Something went wrong",
+      error: error,
     });
   }
 };
@@ -60,11 +63,12 @@ const getSingleProduct = async (req: Request, res: Response) => {
       message: "Products fetched successfully!",
       data: result,
     });
-  } catch (err: any) {
+  } catch (err) {
+    const error = err as CustomError;
     res.status(500).json({
       success: false,
-      message: err.message || "Something went wrong",
-      error: err,
+      message: error.message || "Something went wrong",
+      error: error,
     });
   }
 };
@@ -72,8 +76,8 @@ const getSingleProduct = async (req: Request, res: Response) => {
 // update single product
 const updateSingleProduct = async (req: Request, res: Response) => {
   try {
-    const { productId } = req.params;
     const product = req.body;
+    const { productId } = req.params;
     const result = await ProductServices.updateSingleProductIntoDB(
       productId,
       product
@@ -84,11 +88,12 @@ const updateSingleProduct = async (req: Request, res: Response) => {
       message: "Products updated successfully!",
       data: result,
     });
-  } catch (err: any) {
+  } catch (err) {
+    const error = err as CustomError;
     res.status(500).json({
       success: false,
-      message: err.message || "Something went wrong",
-      error: err,
+      message: error.message || "Something went wrong",
+      error: error,
     });
   }
 };
@@ -103,11 +108,12 @@ const deleteSingleProduct = async (req: Request, res: Response) => {
       message: "Product deleted successfully!",
       data: result,
     });
-  } catch (err: any) {
+  } catch (err) {
+    const error = err as CustomError;
     res.status(500).json({
       success: false,
-      message: err.message || "Something went wrong",
-      error: err,
+      message: error.message || "Something went wrong",
+      error: error,
     });
   }
 };

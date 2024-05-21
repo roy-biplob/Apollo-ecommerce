@@ -1,4 +1,3 @@
-import exp from "constants";
 import { TProduct } from "./product.interface";
 import { productModel } from "./product.model";
 
