@@ -31,7 +31,16 @@ const createOrderIntoDB = async (
 };
 
 // get all orders
+const getAllOrdersIntoDB = async (orderMail: string) => {
+  if (orderMail) {
+    const findOrderWithMail = await OrderModel.find({ email: orderMail });
+    return findOrderWithMail;
+  }
+  const result = await OrderModel.find();
+  return result;
+};
 
 export const OrderServices = {
   createOrderIntoDB,
+  getAllOrdersIntoDB,
 };
