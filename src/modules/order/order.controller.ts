@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { OrderServices } from "./order.service";
 import { CustomError } from "./order.interface";
+import { z } from "zod";
 
 // create order
 const createOrder = async (req: Request, res: Response) => {
@@ -18,12 +19,20 @@ const createOrder = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (err) {
-    const error = err as CustomError;
-    res.status(500).json({
-      success: false,
-      message: error.message || "Something went wrong",
-      // error: err,
-    });
+    {
+      if (err instanceof z.ZodError) {
+        res.status(400).json({
+          success: false,
+          message: err.errors.map((e) => e.message).join(", "),
+        });
+      } else {
+        const error = err as CustomError;
+        res.status(500).json({
+          success: false,
+          message: error.message || "Something went wrong",
+        });
+      }
+    }
   }
 };
 
