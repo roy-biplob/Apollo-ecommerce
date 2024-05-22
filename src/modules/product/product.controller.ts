@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { ProductServices } from "./product.service";
 import { CustomError } from "../order/order.interface";
 import { productSchemaZodValidation } from "../../zod.validation";
+import { z } from "zod";
 
 // product create
 const createProduct = async (req: Request, res: Response) => {
@@ -90,12 +91,19 @@ const updateSingleProduct = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (err) {
-    const error = err as CustomError;
-    res.status(500).json({
-      success: false,
-      message: error.message || "Something went wrong",
-      error: error,
-    });
+    if (err instanceof z.ZodError) {
+      res.status(400).json({
+        success: false,
+        message: err.errors.map((e) => e.message).join(", "),
+      });
+    } else {
+      const error = err as CustomError;
+      res.status(500).json({
+        success: false,
+        message: error.message || "Something went wrong",
+        error: error,
+      });
+    }
   }
 };
 

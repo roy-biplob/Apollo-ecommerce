@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProductControllers = void 0;
 const product_service_1 = require("./product.service");
 const zod_validation_1 = require("../../zod.validation");
+const zod_1 = require("zod");
 // product create
 const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -96,12 +97,20 @@ const updateSingleProduct = (req, res) => __awaiter(void 0, void 0, void 0, func
         });
     }
     catch (err) {
-        const error = err;
-        res.status(500).json({
-            success: false,
-            message: error.message || "Something went wrong",
-            error: error,
-        });
+        if (err instanceof zod_1.z.ZodError) {
+            res.status(400).json({
+                success: false,
+                message: err.errors.map((e) => e.message).join(", "),
+            });
+        }
+        else {
+            const error = err;
+            res.status(500).json({
+                success: false,
+                message: error.message || "Something went wrong",
+                error: error,
+            });
+        }
     }
 });
 //deleted single product
