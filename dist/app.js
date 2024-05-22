@@ -7,6 +7,7 @@ const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const product_route_1 = require("./modules/product/product.route");
 const order_route_1 = require("./modules/order/order.route");
+const routeErrorHandle_1 = __importDefault(require("./middleware/routeErrorHandle"));
 const app = (0, express_1.default)();
 // parser
 app.use(express_1.default.json());
@@ -17,4 +18,5 @@ app.use("/api/orders", order_route_1.OrderRoutes);
 app.get("/", (req, res) => {
     res.send("Server is Running!");
 });
+app.use(routeErrorHandle_1.default);
 exports.default = app;
