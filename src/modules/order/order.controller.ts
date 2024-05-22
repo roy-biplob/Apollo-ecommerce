@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { OrderServices } from "./order.service";
 import { CustomError } from "./order.interface";
 import { z } from "zod";
+import { getAllOrdersSchemaValidate } from "../../zod.validation";
 
 // create order
 const createOrder = async (req: Request, res: Response) => {
@@ -39,6 +40,7 @@ const createOrder = async (req: Request, res: Response) => {
 //get all orders
 const getAllOrders = async (req: Request, res: Response) => {
   try {
+    getAllOrdersSchemaValidate.parse(req.query);
     const orderMail = req.query.email as string;
     const result = await OrderServices.getAllOrdersIntoDB(orderMail);
 
@@ -56,12 +58,19 @@ const getAllOrders = async (req: Request, res: Response) => {
       });
     }
   } catch (err) {
-    const error = err as CustomError;
-    res.status(500).json({
-      success: false,
-      message: error.message || "Something went wrong",
-      error: error,
-    });
+    if (err instanceof z.ZodError) {
+      res.status(400).json({
+        success: false,
+        message: err.errors.map((e) => e.message).join(", "),
+      });
+    } else {
+      const error = err as CustomError;
+      res.status(500).json({
+        success: false,
+        message: error.message || "Something went wrong",
+        error: error,
+      });
+    }
   }
 };
 

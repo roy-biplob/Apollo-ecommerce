@@ -24,3 +24,7 @@ export const orderSchemaZodValidation = z.object({
   price: z.number().min(0, "Price must be a positive number"),
   quantity: z.number().min(1, "Quantity must be at least 1"),
 });
+
+export const getAllOrdersSchemaValidate = z.object({
+  email: z.string().email("Invalid email address").optional(),
+});
