@@ -15,7 +15,7 @@ This project is an Express application developed with TypeScript, integrating Mo
 1. Clone the repository:
 
    ```sh
-   git clone <https://github.com/jonycmtt/Apollo-ecommerce.git>
+   git clone <https://github.com/jonycmtt/Apollo-ecommerce.git](https://github.com/roy-biplob/roy-biplob-next-level-development-assignment2-curd.git>
    cd assignment-02
    ```
 
